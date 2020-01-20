@@ -25,6 +25,53 @@ const setupServer = () => {
     res.send(req.body);
   });
 
+  function isID(value) {
+    return !isNaN(Number(value));
+  }
+
+  app.get("/api/pokemon/:a", (req, res) => {
+    const value = req.params.a;
+    if (isID(value)) {
+      const index = parseInt(value) - 1;
+      res.send(pokeData.pokemon[index]);
+      return;
+    }
+    for (let i = 0; i < pokeData.pokemon.length; i++) {
+      if (pokeData.pokemon[i].name === value) {
+        res.send(pokeData.pokemon[i]);
+      }
+    }
+  });
+
+  app.patch("/api/pokemon/:idOrName", (req, res) => {
+    const idOrName = req.params.idOrName;
+    // console.log(idOrName);
+    const data = req.body;
+    // console.log(data);
+    const keys = Object.keys(data);
+    // console.log(keys);
+    if (isID(idOrName)) {
+      for (let i = 0; i < keys.length; i++) {
+        // console.log(data[keys[i]]);
+        const index = parseInt(idOrName) - 1;
+        // console.log(keys[i], pokeData.pokemon[index][keys[i]]);
+        pokeData.pokemon[index][keys[i]] = data[keys[i]];
+        // console.log(keys[i], pokeData.pokemon[index][keys[i]]);
+      }
+      res.end();
+      return;
+    }
+    for (let i = 0; i < pokeData.pokemon.length; i++) {
+      if (pokeData.pokemon[i].name === idOrName) {
+        for (let j = 0; j < keys.length; j++) {
+          pokeData.pokemon[i][keys[j]] = data[keys[j]];
+          // console.log(pokeData.pokemon[index][keys[j]]);
+        }
+      }
+    }
+    res.end();
+  });
+
   return app;
 };
 

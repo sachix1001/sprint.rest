@@ -41,8 +41,35 @@ describe("Pokemon API Server", () => {
       const expected = {
         id: 152,
       };
-      const res = await request.post("/api/pokemon").send(expected);
+      await request.post("/api/pokemon").send(expected);
       pokeData.pokemon.length.should.equal(152);
+    });
+  });
+
+  describe("GET /api/pokemon/:id - return 1 pokemon matching id or name", () => {
+    it("should return 1 matching pokemon by ID", async () => {
+      const res = await request.get("/api/pokemon/002");
+      JSON.parse(res.text).id.should.equal("002");
+    });
+    it("should return 1 matching pokemon by NAME", async () => {
+      const res = await request.get("/api/pokemon/Ivysaur");
+      JSON.parse(res.text).name.should.equal("Ivysaur");
+    });
+  });
+
+  describe("PATCH /api/pokemon/:idOrName - should allow partial modifications to a Pokemon", () => {
+    it("should change the data of one pokemon", async () => {
+      const expected = {
+        types: ["type modified"],
+        resistant: ["resistant modified"],
+        weaknesses: ["weakness1", "weakness2"],
+      };
+      console.log(pokeData.pokemon);
+      const res = await request.patch("/api/pokemon/001").send(expected);
+      // console.log(pokeData.pokemon);
+      pokeData.pokemon[0].types.should.equal(["type modified"]);
+      pokeData.pokemon[0].resistant.should.equal(["resistant modified"]);
+      pokeData.pokemon[0].weaknesses.should.equal(["weakness1", "weakness2"]);
     });
   });
 });
