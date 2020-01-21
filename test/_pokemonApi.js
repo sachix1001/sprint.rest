@@ -220,4 +220,20 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).length.should.equal(5);
     });
   });
+
+  describe("GET /api/attacks/:name - returns one attack with matching NAME", () => {
+    const expected = {
+      name: "Ember",
+      type: "Fire",
+      damage: 10,
+    };
+    it("should return 1 attack object matching NAME", async () => {
+      const res = await request.get("/api/attacks/Ember");
+      JSON.parse(res.text).should.eql(expected);
+    });
+    it("should return an empty object if NO matching NAME", async () => {
+      const res = await request.get("/api/attacks/Sachi");
+      JSON.parse(res.text).should.eql({});
+    });
+  });
 });

@@ -166,6 +166,24 @@ const setupServer = () => {
     res.send(specialAttacks.slice(0, limit));
   });
 
+  app.get("/api/attacks/:name", (req, res) => {
+    const { name } = req.params;
+    const attackCategory = pokeData.attacks;
+    if (name === undefined) {
+      res.end();
+      return;
+    }
+    for (const attack in attackCategory) {
+      for (let i = 0; i < attackCategory[attack].length; i++) {
+        if (attackCategory[attack][i].name === name) {
+          res.send(attackCategory[attack][i]);
+          return;
+        }
+      }
+    }
+    res.send({});
+  });
+
   return app;
 };
 
