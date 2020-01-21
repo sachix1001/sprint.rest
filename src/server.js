@@ -65,6 +65,20 @@ const setupServer = () => {
     res.end();
   });
 
+  app.delete("/api/pokemon/:idOrName", (req, res) => {
+    const { idOrName } = req.params;
+    if (isID(idOrName)) {
+      pokeData.pokemon.splice(idOrName - 1, 1);
+      res.end();
+    }
+    for (let i = 0; i < pokeData.pokemon.length; i++) {
+      if (pokeData.pokemon[i].name === idOrName) {
+        pokeData.pokemon.splice(i, 1);
+      }
+    }
+    res.end();
+  });
+
   return app;
 };
 

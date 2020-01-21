@@ -64,11 +64,23 @@ describe("Pokemon API Server", () => {
         resistant: ["resistant modified"],
         weaknesses: ["weakness1", "weakness2"],
       };
-      // console.log(pokeData.pokemon);
       await request.patch("/api/pokemon/001").send(expected);
       pokeData.pokemon[0].types.should.eql(["type modified"]);
       pokeData.pokemon[0].resistant.should.eql(["resistant modified"]);
       pokeData.pokemon[0].weaknesses.should.eql(["weakness1", "weakness2"]);
+    });
+  });
+
+  describe("DELETE /api/pokemon/:idOrName - should delete the Pokemon", () => {
+    it("should change the data length to 150 - used ID", async () => {
+      const testLength = await pokeData.pokemon.length;
+      await request.delete("/api/pokemon/002");
+      pokeData.pokemon.length.should.equal(testLength - 1);
+    });
+    it("should change the data length to 150 - used a NAME", async () => {
+      const testLength = await pokeData.pokemon.length;
+      await request.delete("/api/pokemon/Venusaur");
+      pokeData.pokemon.length.should.equal(testLength - 1);
     });
   });
 });
