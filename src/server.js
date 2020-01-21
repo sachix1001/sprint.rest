@@ -237,6 +237,25 @@ const setupServer = () => {
     res.end();
   });
 
+  app.delete("/api/attacks/:name", (req, res) => {
+    const { name } = req.params;
+    const attackCategory = pokeData.attacks;
+    if (name === undefined) {
+      res.end();
+      return;
+    }
+    for (const attack in attackCategory) {
+      for (let i = 0; i < attackCategory[attack].length; i++) {
+        if (attackCategory[attack][i].name === name) {
+          attackCategory[attack].splice(i, 1);
+          res.end();
+          return;
+        }
+      }
+    }
+    res.end();
+  });
+
   return app;
 };
 
