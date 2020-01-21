@@ -67,7 +67,12 @@ const setupServer = () => {
 
   app.get("/api/pokemon/:idOrName/evolutions", (req, res) => {
     const index = findIndex(req.params.idOrName);
-    if (pokeData.pokemon[index].hasOwnProperty("evolutions")) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        pokeData.pokemon[index],
+        "evolutions"
+      )
+    ) {
       res.send(pokeData.pokemon[index].evolutions);
     } else {
       res.send([]);
@@ -76,7 +81,12 @@ const setupServer = () => {
 
   app.get("/api/pokemon/:idOrName/evolutions/previous", (req, res) => {
     const index = findIndex(req.params.idOrName);
-    if (pokeData.pokemon[index].hasOwnProperty("Previous evolution(s)")) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        pokeData.pokemon[index],
+        "Previous evolution(s)"
+      )
+    ) {
       res.send(pokeData.pokemon[index]["Previous evolution(s)"]);
     } else {
       res.send([]);
