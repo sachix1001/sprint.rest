@@ -95,27 +95,18 @@ const setupServer = () => {
 
   app.get("/api/types", (req, res) => {
     const limit = req.query.limit;
-    const temporary = pokeData.pokemon.reduce((added, poke) => {
-      return added.concat(poke.types);
-    }, []);
-    const nodupes = [...new Set(temporary)];
-    if (limit !== undefined) {
-      res.send(nodupes.slice(0, limit));
+    if (limit === undefined) {
+      res.send(pokeData.types);
       return;
     }
-    res.send(nodupes);
+    res.send(pokeData.types.slice(0, limit));
   });
 
   app.post("/api/types", (req, res) => {
     const type = req.body.types;
-    const temporary = pokeData.pokemon.reduce((added, poke) => {
-      return added.concat(poke.types);
-    }, []);
-    const nodupes = [...new Set(temporary)];
-    nodupes.push(type);
-    res.send(nodupes);
-
-    res.end();
+    const typesList = pokeData.types;
+    typesList.push(type);
+    res.send(typesList);
   });
 
   return app;

@@ -152,17 +152,8 @@ describe("Pokemon API Server", () => {
   describe("GET /api/types - all available types up to limit n", () => {
     it("should return 1 array of all types", async () => {
       const res = await request.get("/api/types");
-      JSON.parse(res.text).length.should.equal(18);
+      JSON.parse(res.text).length.should.equal(17);
     });
-    it("should return an array with no duplicates", async () => {
-      const temporary = await pokeData.pokemon.reduce((added, poke) => {
-        return added.concat(poke.types);
-      }, []);
-      const expected = await [...new Set(temporary)];
-      const res = await request.get("/api/types");
-      JSON.parse(res.text).should.eql(expected);
-    });
-
     it("should return n types array if limit is defined", async () => {
       const res = await request.get("/api/types?limit=5");
       JSON.parse(res.text).length.should.equal(5);
@@ -171,10 +162,7 @@ describe("Pokemon API Server", () => {
 
   describe("POST /api/types - adds a type", () => {
     it("should return 1 array of all types including the new type", async () => {
-      const temporary = await pokeData.pokemon.reduce((added, poke) => {
-        return added.concat(poke.types);
-      }, []);
-      const expected = await [...new Set(temporary)];
+      const expected = [...pokeData.types];
       expected.push("TestType");
       const response = await request
         .post("/api/types")
