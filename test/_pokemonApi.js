@@ -279,4 +279,16 @@ describe("Pokemon API Server", () => {
       JSON.parse(response.text).should.eql(expected);
     });
   });
+
+  describe("PATCH /api/attacks/:name - patches one attack with matching NAME", () => {
+    const expected = {
+      name: "TestName",
+      type: "Test",
+      damage: 999,
+    };
+    it("should patch an attack with matching name", async () => {
+      await request.patch("/api/attacks/Tackle").send(expected);
+      pokeData.attacks.fast[0].should.eql(expected);
+    });
+  });
 });
