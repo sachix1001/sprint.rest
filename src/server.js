@@ -10,7 +10,6 @@ const setupServer = () => {
     const n = req.query.limit;
     if (n !== undefined) {
       const results = [];
-      // console.log(Array.isArray(pokeData.pokemon));
       for (let i = 0; i < n; i++) {
         results.push(pokeData.pokemon[i]);
       }
@@ -25,83 +24,54 @@ const setupServer = () => {
     res.send(req.body);
   });
 
-  function isID(value) {
-    return !isNaN(Number(value));
+  function findIndex(idOrName) {
+    let index;
+    // if it's a name
+    if (isNaN(Number(idOrName))) {
+      for (let i = 0; i < pokeData.pokemon.length; i++) {
+        if (pokeData.pokemon[i].name === idOrName) {
+          index = i;
+        }
+      }
+    } else {
+      // if it's an ID
+      for (let i = 0; i < pokeData.pokemon.length; i++) {
+        if (pokeData.pokemon[i].id === idOrName) {
+          index = i;
+        }
+      }
+    }
+    return index;
   }
 
   app.get("/api/pokemon/:a", (req, res) => {
-    const value = req.params.a;
-    if (isID(value)) {
-      const index = parseInt(value) - 1;
-      res.send(pokeData.pokemon[index]);
-      return;
-    }
-    for (let i = 0; i < pokeData.pokemon.length; i++) {
-      if (pokeData.pokemon[i].name === value) {
-        res.send(pokeData.pokemon[i]);
-      }
-    }
+    const index = findIndex(req.params.a);
+    res.send(pokeData.pokemon[index]);
   });
 
   app.patch("/api/pokemon/:idOrName", (req, res) => {
-    const idOrName = req.params.idOrName;
+    const index = findIndex(req.params.idOrName);
     const data = req.body;
     const keys = Object.keys(data);
-    if (isID(idOrName)) {
-      for (let i = 0; i < keys.length; i++) {
-        const index = parseInt(idOrName) - 1;
-        pokeData.pokemon[index][keys[i]] = data[keys[i]];
-      }
-      res.end();
-      return;
-    }
-    for (let i = 0; i < pokeData.pokemon.length; i++) {
-      if (pokeData.pokemon[i].name === idOrName) {
-        for (let j = 0; j < keys.length; j++) {
-          pokeData.pokemon[i][keys[j]] = data[keys[j]];
-        }
-      }
+    for (let i = 0; i < keys.length; i++) {
+      pokeData.pokemon[index][keys[i]] = data[keys[i]];
     }
     res.end();
   });
 
   app.delete("/api/pokemon/:idOrName", (req, res) => {
-    const { idOrName } = req.params;
-    if (isID(idOrName)) {
-      pokeData.pokemon.splice(idOrName - 1, 1);
-      res.end();
-    }
-    for (let i = 0; i < pokeData.pokemon.length; i++) {
-      if (pokeData.pokemon[i].name === idOrName) {
-        pokeData.pokemon.splice(i, 1);
-      }
-    }
+    const index = findIndex(req.params.idOrName);
+    pokeData.pokemon.splice(index, 1);
     res.end();
   });
 
   app.get("/api/pokemon/:idOrName/evolutions", (req, res) => {
-    const { idOrName } = req.params;
-    if (isID(idOrName)) {
-      for (let i = 0; i < pokeData.pokemon.length; i++) {
-        if (pokeData.pokemon[i].id === idOrName) {
-          if (pokeData.pokemon[i].hasOwnProperty("evolutions")) {
-            res.send(pokeData.pokemon[i].evolutions);
-          } else {
-            res.send([]);
-          }
-        }
-      }
+    const index = findIndex(req.params.idOrName);
+    if (pokeData.pokemon[index].hasOwnProperty("evolutions")) {
+      res.send(pokeData.pokemon[index].evolutions);
+    } else {
+      res.send([]);
     }
-    for (let i = 0; i < pokeData.pokemon.length; i++) {
-      if (pokeData.pokemon[i].name === idOrName) {
-        if (pokeData.pokemon[i].hasOwnProperty("evolutions")) {
-          res.send(pokeData.pokemon[i].evolutions);
-        } else {
-          res.send([]);
-        }
-      }
-    }
-    res.end();
   });
 
   return app;
