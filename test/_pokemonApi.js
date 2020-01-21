@@ -40,6 +40,7 @@ describe("Pokemon API Server", () => {
     it("should change the data length to 152", async () => {
       const expected = {
         id: 152,
+        types: ["Bug"],
       };
       await request.post("/api/pokemon").send(expected);
       pokeData.pokemon.length.should.equal(152);
@@ -145,6 +146,27 @@ describe("Pokemon API Server", () => {
         "/api/pokemon/Slowpoke/evolutions/previous"
       );
       JSON.parse(res.text).should.eql([]);
+    });
+  });
+
+  describe("GET /api/types - all available types up to limit n", () => {
+    it("should return 1 array of all types", async () => {
+      const res = await request.get("/api/types");
+      JSON.parse(res.text).length.should.equal(18);
+    });
+    it("should return an array with no duplicate", async () => {
+      const temporary = await pokeData.pokemon.reduce((added, poke) => {
+        return added.concat(poke.types);
+      }, []);
+      const expected = await [...new Set(temporary)];
+      // console.log("expected", expected);
+      const res = await request.get("/api/types");
+      JSON.parse(res.text).should.eql(expected);
+    });
+
+    it("should return n types array if limit is defined", async () => {
+      const res = await request.get("/api/types?limit=5");
+      JSON.parse(res.text).length.should.equal(5);
     });
   });
 });

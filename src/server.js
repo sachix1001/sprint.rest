@@ -93,6 +93,19 @@ const setupServer = () => {
     }
   });
 
+  app.get("/api/types", (req, res) => {
+    const limit = req.query.limit;
+    const temporary = pokeData.pokemon.reduce((added, poke) => {
+      return added.concat(poke.types);
+    }, []);
+    const nodupes = [...new Set(temporary)];
+    if (limit !== undefined) {
+      res.send(nodupes.slice(0, limit));
+      return;
+    }
+    res.send(nodupes);
+  });
+
   return app;
 };
 
