@@ -146,6 +146,26 @@ const setupServer = () => {
     res.send(allAttacks.slice(0, limit));
   });
 
+  app.get("/api/attacks/fast", (req, res) => {
+    const limit = req.query.limit;
+    const fastAttacks = pokeData.attacks.fast;
+    if (limit === undefined) {
+      res.send(fastAttacks);
+      return;
+    }
+    res.send(fastAttacks.slice(0, limit));
+  });
+
+  app.get("/api/attacks/special", (req, res) => {
+    const limit = req.query.limit;
+    const specialAttacks = pokeData.attacks.special;
+    if (limit === undefined) {
+      res.send(specialAttacks);
+      return;
+    }
+    res.send(specialAttacks.slice(0, limit));
+  });
+
   return app;
 };
 

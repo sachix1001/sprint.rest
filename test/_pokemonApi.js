@@ -198,4 +198,26 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).length.should.equal(5);
     });
   });
+
+  describe("GET /api/attacks/fast - all available fast attacks up to limit n", () => {
+    it("should return 1 array of all attacks", async () => {
+      const res = await request.get("/api/attacks/fast");
+      JSON.parse(res.text).length.should.equal(pokeData.attacks.fast.length);
+    });
+    it("should return n attacks array if limit is defined", async () => {
+      const res = await request.get("/api/attacks/fast?limit=5");
+      JSON.parse(res.text).length.should.equal(5);
+    });
+  });
+
+  describe("GET /api/attacks/special - all available special attacks up to limit n", () => {
+    it("should return 1 array of all attacks", async () => {
+      const res = await request.get("/api/attacks/special");
+      JSON.parse(res.text).length.should.equal(pokeData.attacks.special.length);
+    });
+    it("should return n attacks array if limit is defined", async () => {
+      const res = await request.get("/api/attacks/special?limit=5");
+      JSON.parse(res.text).length.should.equal(5);
+    });
+  });
 });
