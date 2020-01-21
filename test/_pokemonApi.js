@@ -291,4 +291,13 @@ describe("Pokemon API Server", () => {
       pokeData.attacks.fast[0].should.eql(expected);
     });
   });
+
+  describe("DELETE /api/attacks/:name - delete one attack with matching NAME", async () => {
+    it("should patch an attack with matching name", async () => {
+      const expected = [...pokeData.attacks.fast];
+      expected.unshift();
+      await request.delete("/api/attacks/Tackle");
+      pokeData.attacks.fast.should.eql(expected);
+    });
+  });
 });
