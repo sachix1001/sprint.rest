@@ -132,6 +132,20 @@ const setupServer = () => {
     res.send(result);
   });
 
+  app.get("/api/attacks", (req, res) => {
+    const limit = req.query.limit;
+    const attackCategory = pokeData.attacks;
+    let allAttacks = [];
+    for (const attack in attackCategory) {
+      allAttacks = allAttacks.concat(attackCategory[attack]);
+    }
+    if (limit === undefined) {
+      res.send(allAttacks);
+      return;
+    }
+    res.send(allAttacks.slice(0, limit));
+  });
+
   return app;
 };
 

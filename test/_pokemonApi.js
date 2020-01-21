@@ -187,4 +187,15 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).length.should.equal(22);
     });
   });
+
+  describe("GET /api/attacks - all available attacks up to limit n", () => {
+    it("should return 1 array of all attacks", async () => {
+      const res = await request.get("/api/attacks");
+      JSON.parse(res.text).length.should.equal(124);
+    });
+    it("should return n attacks array if limit is defined", async () => {
+      const res = await request.get("/api/attacks?limit=5");
+      JSON.parse(res.text).length.should.equal(5);
+    });
+  });
 });
