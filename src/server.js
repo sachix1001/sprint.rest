@@ -109,6 +109,18 @@ const setupServer = () => {
     res.send(typesList);
   });
 
+  app.delete("/api/types/:name", (req, res) => {
+    const { name } = req.params;
+    const types = pokeData.types;
+    for (let i = 0; i < types.length; i++) {
+      if (types[i] === name) {
+        types.splice(i, 1);
+        res.send(types);
+      }
+    }
+    res.end();
+  });
+
   return app;
 };
 
