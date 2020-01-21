@@ -247,4 +247,36 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).should.eql([]);
     });
   });
+
+  describe("POST /api/attacks/fast - adds a fast attack", () => {
+    it("should return 1 array of all attacks including the new attack", async () => {
+      const expected = [...pokeData.attacks.fast];
+      const testAttack = {
+        name: "TestAttack",
+        type: "Normal",
+        damage: 1000,
+      };
+      expected.push(testAttack);
+      const response = await request
+        .post("/api/attacks/fast")
+        .send({ attacks: testAttack });
+      JSON.parse(response.text).should.eql(expected);
+    });
+  });
+
+  describe("POST /api/attacks/special - adds a special attack", () => {
+    it("should return 1 array of all attacks including the new attack", async () => {
+      const expected = [...pokeData.attacks.special];
+      const testAttack = {
+        name: "SpecialAttack",
+        type: "Normal",
+        damage: 1000000,
+      };
+      expected.push(testAttack);
+      const response = await request
+        .post("/api/attacks/special")
+        .send({ attacks: testAttack });
+      JSON.parse(response.text).should.eql(expected);
+    });
+  });
 });
