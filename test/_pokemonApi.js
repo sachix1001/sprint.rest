@@ -236,4 +236,15 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).should.eql({});
     });
   });
+
+  describe("GET /api/attacks/:name/pokemon - return 1 array if pokemon has attack", () => {
+    it("should return array of pokemon that has attack", async () => {
+      const res = await request.get("/api/attacks/Bubble/pokemon");
+      JSON.parse(res.text).should.eql([]);
+    });
+    it("should return empty array if no pokemon have attack", async () => {
+      const res = await request.get("/api/attacks/Sachi/pokemon");
+      JSON.parse(res.text).should.eql([]);
+    });
+  });
 });

@@ -184,6 +184,25 @@ const setupServer = () => {
     res.send({});
   });
 
+  app.get("/api/attacks/:name/pokemon", (req, res) => {
+    const { name } = req.params;
+    // eslint-disable-next-line array-callback-return
+    const result = pokeData.pokemon.filter((pokemon) => {
+      if (pokemon.hasOwnProperty.fast && pokemon.hasOwnProperty.special) {
+        const pokemonAttacks = pokemon.attacks.fast.concat(
+          pokemon.attacks.special
+        );
+        for (const attacks in pokemonAttacks) {
+          if (attacks.name === name) {
+            return false;
+          }
+        }
+        return true;
+      }
+    });
+    res.send(result);
+  });
+
   return app;
 };
 
