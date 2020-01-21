@@ -83,4 +83,41 @@ describe("Pokemon API Server", () => {
       pokeData.pokemon.length.should.equal(testLength - 1);
     });
   });
+
+  describe("GET /api/pokemon/:idOrName/evolutions - return 1 array if pokemon has evolutions", () => {
+    it("should return 1 matching evolutions array by ID", async () => {
+      const expected = [
+        {
+          id: 5,
+          name: "Charmeleon",
+        },
+        {
+          id: 6,
+          name: "Charizard",
+        },
+      ];
+
+      const res = await request.get("/api/pokemon/004/evolutions");
+      JSON.parse(res.text).should.eql(expected);
+    });
+    it("should return 1 matching evolutions array by NAME", async () => {
+      const expected = [
+        {
+          id: 6,
+          name: "Charizard",
+        },
+      ];
+      const res = await request.get("/api/pokemon/Charmeleon/evolutions");
+      JSON.parse(res.text).should.eql(expected);
+    });
+
+    it("should return empty array by ID if no evolutions", async () => {
+      const res = await request.get("/api/pokemon/078/evolutions");
+      JSON.parse(res.text).should.eql([]);
+    });
+    it("should return empty array by NAME if no evolutions", async () => {
+      const res = await request.get("/api/pokemon/Slowbro/evolutions");
+      JSON.parse(res.text).should.eql([]);
+    });
+  });
 });

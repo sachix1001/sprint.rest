@@ -79,6 +79,31 @@ const setupServer = () => {
     res.end();
   });
 
+  app.get("/api/pokemon/:idOrName/evolutions", (req, res) => {
+    const { idOrName } = req.params;
+    if (isID(idOrName)) {
+      for (let i = 0; i < pokeData.pokemon.length; i++) {
+        if (pokeData.pokemon[i].id === idOrName) {
+          if (pokeData.pokemon[i].hasOwnProperty("evolutions")) {
+            res.send(pokeData.pokemon[i].evolutions);
+          } else {
+            res.send([]);
+          }
+        }
+      }
+    }
+    for (let i = 0; i < pokeData.pokemon.length; i++) {
+      if (pokeData.pokemon[i].name === idOrName) {
+        if (pokeData.pokemon[i].hasOwnProperty("evolutions")) {
+          res.send(pokeData.pokemon[i].evolutions);
+        } else {
+          res.send([]);
+        }
+      }
+    }
+    res.end();
+  });
+
   return app;
 };
 
