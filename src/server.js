@@ -106,6 +106,18 @@ const setupServer = () => {
     res.send(nodupes);
   });
 
+  app.post("/api/types", (req, res) => {
+    const type = req.body.types;
+    const temporary = pokeData.pokemon.reduce((added, poke) => {
+      return added.concat(poke.types);
+    }, []);
+    const nodupes = [...new Set(temporary)];
+    nodupes.push(type);
+    res.send(nodupes);
+
+    res.end();
+  });
+
   return app;
 };
 
