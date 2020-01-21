@@ -170,6 +170,7 @@ describe("Pokemon API Server", () => {
       JSON.parse(response.text).should.eql(expected);
     });
   });
+
   describe("DELETE /api/types/:name - deletes a type", () => {
     it("should return 1 array of all types excluding the deleted type", async () => {
       const expected = [...pokeData.types];
@@ -177,6 +178,13 @@ describe("Pokemon API Server", () => {
       await request.delete("/api/types/TestType");
       pokeData.types.length.should.equal(17);
       pokeData.types.should.eql(expected);
+    });
+  });
+
+  describe("GET /api/types/:type/pokemon - returns all pokemons with the given type", () => {
+    it("should return 1 array of pokemon's ID and name", async () => {
+      const res = await request.get("/api/types/Normal/pokemon");
+      JSON.parse(res.text).length.should.equal(22);
     });
   });
 });

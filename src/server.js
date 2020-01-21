@@ -121,6 +121,17 @@ const setupServer = () => {
     res.end();
   });
 
+  app.get("/api/types/:type/pokemon", (req, res) => {
+    const { type } = req.params;
+    const result = pokeData.pokemon.reduce((list, pokemon) => {
+      if (pokemon.types.includes(type)) {
+        list.push({ id: pokemon.id, name: pokemon.name });
+      }
+      return list;
+    }, []);
+    res.send(result);
+  });
+
   return app;
 };
 
