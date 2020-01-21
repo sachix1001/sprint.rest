@@ -74,6 +74,15 @@ const setupServer = () => {
     }
   });
 
+  app.get("/api/pokemon/:idOrName/evolutions/previous", (req, res) => {
+    const index = findIndex(req.params.idOrName);
+    if (pokeData.pokemon[index].hasOwnProperty("Previous evolution(s)")) {
+      res.send(pokeData.pokemon[index]["Previous evolution(s)"]);
+    } else {
+      res.send([]);
+    }
+  });
+
   return app;
 };
 

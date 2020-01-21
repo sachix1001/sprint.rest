@@ -120,4 +120,31 @@ describe("Pokemon API Server", () => {
       JSON.parse(res.text).should.eql([]);
     });
   });
+  describe("GET /api/pokemon/:idOrName/evolutions/previous - return 1 array if pokemon has previous evolutions", () => {
+    const expected = [
+      {
+        id: 79,
+        name: "Slowpoke",
+      },
+    ];
+    it("should return 1 matching previous evolutions array by ID", async () => {
+      const res = await request.get("/api/pokemon/080/evolutions/previous");
+      JSON.parse(res.text).should.eql(expected);
+    });
+    it("should return 1 matching previous evolutions array by NAME", async () => {
+      const res = await request.get("/api/pokemon/Slowbro/evolutions/previous");
+      JSON.parse(res.text).should.eql(expected);
+    });
+
+    it("should return empty array by ID if no evolutions", async () => {
+      const res = await request.get("/api/pokemon/079/evolutions/previous");
+      JSON.parse(res.text).should.eql([]);
+    });
+    it("should return empty array by NAME if no evolutions", async () => {
+      const res = await request.get(
+        "/api/pokemon/Slowpoke/evolutions/previous"
+      );
+      JSON.parse(res.text).should.eql([]);
+    });
+  });
 });
